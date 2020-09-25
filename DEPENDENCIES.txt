@@ -1,19 +1,18 @@
-|package_name|
---------------------
-|adventr|
-|affy|
-|agricolae|
-|AmesHousing|
-|AppliedPredictiveModeling|
-|aws.s3|
-|beanplot|
-|broom|
-|BSgenome.Hsapiens.UCSC.hg38|
-|captioner|
-|car|
-|caret|
-|cbsodataR|
+## package_name
 
+adventr
+affy
+agricolae
+AmesHousing
+AppliedPredictiveModeling
+aws.s3
+beanplot
+broom
+BSgenome.Hsapiens.UCSC.hg38
+captioner
+car
+caret
+cbsodataR
 cowplot
 devtools
 DiagrammeR
