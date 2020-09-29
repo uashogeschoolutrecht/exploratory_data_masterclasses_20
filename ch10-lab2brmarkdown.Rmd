@@ -41,6 +41,14 @@ This workflow fits in a 'continuous integration' workflow
 
 ...
 
+## To get an example of paramterized RMarkdown:
+Clone this repo and run the examples in the folder ~/work_flows/Rmd/
+https://github.com/uashogeschoolutrecht/work_flows
+
+To see an interactive Graph run the example:
+
+
+
 ## Good resources:
 
 - [http://rmarkdown.rstudio.com/](http://rmarkdown.rstudio.com/)
