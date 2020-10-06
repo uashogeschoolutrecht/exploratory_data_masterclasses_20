@@ -5,6 +5,13 @@
 library(tidyverse)
 ```
 
+```{r, include=FALSE}
+## load helper functions
+source(here::here("R", "functions.R"))
+```
+
+
+
 
 ## A case example
 
@@ -17,6 +24,7 @@ library(tidyverse)
 
 ```{r, eval=FALSE}
 df$var_a[df$var_a ==  999] <- NA
+df$var_a[df$var_b ==  999] <- NA
 df$var_b[df$var_b == -999] <- NA
 df$var_h[df$var_h == -999] <- NA
 df$var_i[df$var_j == -989] <- NA
@@ -48,27 +56,66 @@ Writing a function that replaces
 
 ## dummies
 x <- c(999, 7767, 999, -999)
-na_indicator <- "test"
+x
 
-replace_x_for_na <- function(x, na_indicator){
-  
-  x[x == na_indicator] <- NA
- # string <- "done!"
-  return(x)
+#function_name <- function(<args>){
+#
+#    <body><mutats args>
+#   return(<result>)
+#}
 
-  
-}
 
-test <- c(999, -999, 7, 8)
+## define function
 
-replace_x_for_na(x = test, na_indicator = 999)
+## test function
+replace_indicator_for_na(x = x, key = -999)
+
 
 ```
 
 Apply this function to one column of our data-frame `df`
 ```{r}
-df$a
-replace_x_for_na(df$a, na_indicator = "-999")
+
+df_modified <- df %>%
+  mutate(a = replace_indicator_for_na(x = a, key = -999),
+         b = replace_indicator_for_na(x = b, key = -999))
+
+
+typeof(df)
+
+lapply(
+  df,
+  FUN = replace_indicator_for_na, key = -999
+) %>% as_tibble()
+
+sapply(
+  df,
+  FUN = replace_indicator_for_na, key = -999
+)
+
+data_files <- here::here("data", "diet")
+
+files <- list.files(
+  data_files,
+  pattern = ".csv",
+  full.names = TRUE)
+
+andy <- read_csv(files[1])
+
+data_diet <- map(
+   .x = files,
+   .f = read_csv, 
+   col_types = cols(
+  `Patient Name` = col_character(),
+  Age = col_double(),
+  Weight = col_character(),
+  Day = col_double())
+ ) %>% dplyr::bind_rows() %>%
+  janitor::clean_names() %>%
+  mutate(weight = replace_indicator_for_na(weight, key = c("?", "missing", "not")))
+
+
+
 ```
 
 Apply our function to our whole `df`
