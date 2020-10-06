@@ -1,0 +1,13 @@
+## URL to Tidy tuesday Cocktails anaysis by Hadley Wickham
+
+
+clone and run R code for interactive demo
+
+https://gist.github.com/hadley/a892ff8f00973e3bc864851deae8315f
+
+see also Youtube: https://www.youtube.com/watch?v=EC0SVkFB2OU 
+
+data available via:
+
+boston_cocktails <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv")
+
