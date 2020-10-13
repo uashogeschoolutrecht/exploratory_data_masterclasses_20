@@ -12,6 +12,11 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 5, fig.height = 3)
 require("rprojroot") || utils::install.packages("rprojroot")
 library(rprojroot)
 root <- find_root_file(criterion = is_rstudio_project)
+
+
+
+
+
 ```
 
 ## The map functions
@@ -23,6 +28,7 @@ The pattern of looping over a vector, doing something to each element and saving
 * `map_int()` makes an integer vector.
 * `map_dbl()` makes a double vector.
 * `map_chr()` makes a character vector.
+* `map_df()`
 
 Each function takes a vector as input, applies a function to each piece, and then returns a new vector that's the same length (and has the same names) as the input. The type of the vector is determined by the suffix to the map function. 
 
@@ -31,6 +37,15 @@ Once you master these functions, you'll find it takes much less time to solve it
 Some people will tell you to avoid for loops because they are slow. They're wrong! (Well at least they're rather out of date, as for loops haven't been slow for many years). The chief benefits of using functions like `map()` is not speed, but clarity: they make your code easier to write and to read.
 
 We can use these functions to perform the same computations as the last for loop. Those summary functions returned doubles, so we need to use `map_dbl()`:
+
+
+```{r}
+df <- tibble(a = c(1:9, -999), 
+             b = c(1:5, -999, -999, 8:10),
+             c = LETTERS[1:10])
+df
+```
+
 
 ```{r}
 map_dbl(df, mean)
@@ -121,7 +136,7 @@ mu %>%
 What if you also want to vary the standard deviation? One way to do that would be to iterate over the indices and index into vectors of means and sds:
 
 ```{r}
-sigma <- list(1, 5, 10)
+sigma <- list(1, 5)
 seq_along(mu) %>% 
   map(~rnorm(5, mu[[.]], sigma[[.]])) %>% 
   str()
@@ -130,7 +145,11 @@ seq_along(mu) %>%
 But that obfuscates the intent of the code. Instead we could use `map2()` which iterates over two vectors in parallel:
 
 ```{r}
-map2(mu, sigma, rnorm, n = 5) %>% str()
+rnorm(100000) %>% hist
+rnorm(100, mean = 2, sd = 0.1)
+
+## map2 - can be used in a case where the function you want to loop needs two arguments
+map2(mu, sigma, rnorm, n = 1000) %>% enframe() 
 ```
 
 `map2()` generates this series of function calls:
@@ -181,6 +200,11 @@ args2 %>%
 Since the arguments are all the same length, it makes sense to store them in a data frame:
 
 ```{r}
+
+
+
+
+
 params <- tribble(
   ~mean, ~sd, ~n,
     5,     1,  1,
