@@ -35,7 +35,7 @@ Depending on the aim or nature of your problem or challenge you can either use:
   
 ## Open Science
 
-Open Data is an an important prerequisite and concept contained within the Open Science framework. Tih sframework shortly entails the following concepts: 
+Open Data is an an important prerequisite and concept contained within the Open Science framework. This framework shortly entails the following concepts: 
 
  - Information (meta data), data and analysis (code and tools) are combined and stored _together_
  - Freely available (under e.g. CC-BY-NC 4.0 LICENCE)

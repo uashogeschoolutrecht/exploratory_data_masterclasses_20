@@ -27,8 +27,8 @@ http://rstudio-pubs-static.s3.amazonaws.com/78857_86c2403ca9c146ba8fcdcda79c3f47
  - Lab 6a Exploring distributions
  - Lab 6a Testing Assumptions
  - Lab 6a Data transformations
- - Lab 6b Bootstrapping
-
+ 
+ - Lab 6b: Bootstrapping
  - Lab 6b: Simple linear regression
  - Lab 6b: multiple regression
  - Lab 6b: Comparing two and more means
@@ -127,12 +127,27 @@ normals <- rnorm(n = 100, mean = 0, sd = 1) %>%
 mean(normals$value)
 sd(normals$value)
 
+## 
+hist(normals$value)
+
 ## plot
 normals %>%
 ggplot(aes(x=value)) + 
   stat_function(fun = dnorm, colour = "red", size = 1) +
   xlim(c(-4, 4)) 
-  
+
+## resampling
+
+sample_1 <- sample_n(normals, 100, replace = TRUE)
+mean(sample_1$value)
+sample_2 <- sample_n(normals, 100, replace = TRUE)
+mean(sample_2$value)  
+
+## homework:
+## create a function that generates 1000 boostrapped samples of the mean form the 'normal$value' sample
+## plot a histogram of the 1000 mean-estimates
+
+
 ```
 
 C) Add the `mean` and the `sd` as a vertical (dashed) line to the graph from B)
@@ -184,6 +199,11 @@ ggplot(mtcars, aes(x = mpg)) +
   geom_density(aes(y=..density..),      
                    binwidth = 1,
                    colour = "red")
+
+
+
+
+
 
 
 ```
@@ -324,11 +344,19 @@ data_students %>%
 ind <- map_lgl(data_nested_students$data[[1]], is.numeric) 
 
 ## Females  
-map(data_nested_students$data[[1]][, ind], shapiro.test) %>%
-  map(., broom::tidy) %>% dplyr::bind_rows() %>%
-    mutate(var = names(data_nested_students$data[[1]][ind]),
-           gender = data_nested_students$gender[1]) -> shapiros_female
+map(data_nested_students$data[[1]][, ind], shapiro.test) 
 
+vector <- c(1:10)
+
+shapiro.test(vector)
+
+# H0 = Shapiro = Distributie is normaal verdeeld
+
+# %>%
+#   map(., broom::tidy) %>% dplyr::bind_rows() %>%
+#     mutate(var = names(data_nested_students$data[[1]][ind]),
+#            gender = data_nested_students$gender[1]) -> shapiros_female
+# 
 ## Males
 map(data_nested_students$data[[2]][, ind], shapiro.test) %>%
   map(., broom::tidy) %>% dplyr::bind_rows() %>%
@@ -405,15 +433,21 @@ data_students %>%
 ```{r, solution, include=FALSE}
 library(nlme)
 
+## statistics for inference
+## statistics for prediction
+
 ## linear model, anova
 salary_model_1 <- lm(data = data_students, salary ~ gender * major) 
 aov(salary_model_1) %>% summary
+
+## equal variance for all groups
 
 ## model inspection
 plot(salary_model_1)
 
 ## mixed effects model
-salary_model_2 <- lme(data = data_students %>% na.omit(), salary ~ gender * major,
+salary_model_2 <- lme(data = data_students %>% na.omit(), 
+                      salary ~ gender * major,
                         random = ~1 | semester)
 
 anova(salary_model_2)

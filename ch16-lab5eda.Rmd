@@ -72,11 +72,11 @@ library(tidyverse)
  1. What’s missing from the data and how do you deal with it?
  1. Where are the outliers and why should you care about them?
  1. How can you add, change or remove features to get more out of your data?
- 1. Do you need additional data from other sources to relate to the dataset under scrutany?
- 1. Are underlying statitical assumptions met / how is data distribution looking?
+ 1. Do you need additional data from other sources to relate to the dataset under scrutiny?
+ 1. Are underlying statistical assumptions met / how is data distribution looking?
  1. What (exploratory) models apply or fit well to the data?
- 1. What is the undelying (experimental) design?
- 1. Is there multi-colinearity?
+ 1. What is the underlying (experimental) design?
+ 
  
 We will address each of these questions with an example dataset in the demo that follows.
  
@@ -156,6 +156,12 @@ ggplot(data = diamonds) +
 ```{r}
 diamonds %>% 
   count(cut) ## the sort argument (set to TRUE will show the largest on top)
+
+
+diamonds %>%
+  group_by(cut) %>%
+  tally()
+
 ```
 
 ### Continuous variables
@@ -196,7 +202,9 @@ smaller %>%
 smaller %>%
   ggplot(aes(x = carat, colour = cut)) +
     geom_freqpoly(binwidth = 0.1) +
-    theme_bw() ## set to bw for better contrast
+facet_wrap(~cut)  
+  
+  #  theme_bw() ## set to bw for better contrast
 ```
 
 ### Subsequent questions
@@ -254,6 +262,12 @@ When you see a histogram with an extraordinary large x-axis, you have to be vigi
 ```{r}
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = y), binwidth = 0.5)
+
+
+max(diamonds$y)
+
+
+
 ```   
 
 ### Zooming in on your data
@@ -264,6 +278,13 @@ This truncates the y-axis
 ggplot(diamonds) + 
   geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
   coord_cartesian(ylim = c(0, 50))
+
+
+ggplot(diamonds, aes(y = log(y))) +
+  geom_boxplot()
+
+
+
 ```   
 
 ### Zoomed in
@@ -293,6 +314,8 @@ unusual
 diamonds %>%
   ggplot(aes(x = cut, y = y)) +
   geom_boxplot()
+
+
 ```
 
 ## Missing values
@@ -317,6 +340,56 @@ A) Replace the values smaller than 3 and larger than 20 for missing values
 ```{r, include=FALSE}
   diamonds2 <- diamonds %>% 
       mutate(y = ifelse(y < 3 | y > 20, NA, y))
+
+
+df <- tribble(
+  ~gender, ~age,
+  0, 23,
+  1, 26,
+  1, 33
+)
+
+df
+
+# gender 0 = male, 1 = female
+
+df %>%
+mutate(gender_recoded = ifelse(gender == 0, "male", "female"))
+
+numbers <- rnorm(100, mean = 10, sd = 1)
+hist(numbers)
+
+log(numbers)
+
+
+number_log <- numeric() ## storage vector
+
+for(i in 1:length(numbers)){
+  number_log[i] <- log(numbers[i])
+}
+
+
+
+number_log
+
+
+string <- c("This is A STRING with RANDOm uppeR and Lower Cases") 
+
+tolower(string)
+toupper(string)
+
+## first upper - put this function in your own toolbox package
+firstup <- function(x){
+  substr(x, 1, 1) <- toupper(substr(x, 1, 1))
+  x
+}
+ 
+first_up <- "let's check if it works"
+firstup(first_up)
+
+ggtitle()
+
+
 ```
 
 ## Missing values warning in ggplot2
@@ -325,6 +398,8 @@ Like R, ggplot2 subscribes to the philosophy that missing values should never si
 B) Plot the x and y variables of the `diamonds2` dataset that you have created above in a scatter plot, write down the warning message.
 
 ```{r, include=FALSE}
+ggplot2::diamonds2
+
 ggplot(data = diamonds2, mapping = aes(x = x, y = y)) + 
   geom_point()
 ```
@@ -430,7 +505,8 @@ A) To make the trend easier to see, reorder by `class` based on the median value
 ```{r, include=FALSE}
 ggplot(data = mpg) +
   geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), 
-                             y = hwy)) + xlab("Class")
+                             y = hwy)) + xlab("Class") +
+  toolboxr::rotate_axis_labels("x", 45)
 ```
 
 ## Positioning labels on axis, or flip the axis
@@ -448,6 +524,11 @@ To visualise the covariation between categorical variables, you'll need to count
 ```{r}
 ggplot(data = diamonds) +
   geom_count(mapping = aes(x = cut, y = color))
+
+
+
+
+
 ```
 
 ## Circles
@@ -512,6 +593,9 @@ ggplot(data = smaller, mapping = aes(x = carat, y = price)) +
 ```{r}
 ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
   geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
+
+diamonds
+
 ```
 
 
@@ -550,7 +634,7 @@ unzip(
     "household_power_consumption.zip"), 
     exdir = here::here("data", "household_powerconsumption.txt"))
 
-data_energy <- readr::read_csv(
+data_energy <- readr::read_csv2(
   here::here(
     "data",
     "household_power_consumption.zip")
@@ -565,12 +649,64 @@ data_energy %>%
   is.na %>%
   sum()
 
+data_energy %>%
+  sample_n(100000) 
+```
 
+C) Create a visualization of the variables `Global_active_power` and `Date` that is meaningful and shows a clear pattern of power consumption of the year 2008
+
+```{r}
+## clean names
+data_energy_clean_sample <- data_energy %>%
+  sample_n(10000)  %>%
+  janitor::clean_names() 
+
+## mutate Date var and extract year  
+data_plot <- data_energy_clean_sample %>%
+  mutate(date_new = lubridate::as_date(date, format = "%d/%m/%y")) %>%
+  mutate(year = lubridate::year(date_new)) %>%
+  dplyr::filter()
+  group_by(date) %>%
+  summarise(mean_per_day = mean(global_active_power, na.rm = TRUE))
+
+data_plot
+  
+mean(c(2, 5, NA), na.rm = TRUE)
+
+  
+data_plot %>%
+  ggplot(aes(x = date, y = mean_per_day)) +
+  geom_point()
+
+
+
+
+
+data_energy_clean_sample_1$
+  
+names(data_energy_clean_sample_1)
+data_energy_clean_sample_1$year %>% unique()
+
+data_energy_clean_sample_1
+
+
+
+## see if it works
+data_energy_clean_sample$year[1:2]
+  
+# alternative approach with tidyr::separate()
+# separate(col = Date, into = c("day", "month", "year"), sep = "/")
+  
+ind <- str_detect(string = data_energy$Date, pattern = ".2008")  
+
+# tests
+dummy <- c("02/03/2009")   
+str_detect(string = dummy, pattern = ".2008")  
+lubridate::as_date(dummy, format = "%d/%m/%y")
 
 
 ```
 
-C) Create a visualization of the variables `Global_active_power` and `Date` that is meaningful and shows a clear pattern of power consumption of the year 2008
 
 D) Show a number of visualization that show the relationship between the time of day and power consumption
 
