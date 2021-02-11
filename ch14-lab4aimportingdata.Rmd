@@ -1,6 +1,6 @@
 # Lab 4A; Importing data {#lab4aimportingdata}
 
-```{r setup, include=FALSE}
+```{r setup14, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 ```
 

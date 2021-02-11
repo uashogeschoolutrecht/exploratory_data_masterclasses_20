@@ -1,6 +1,6 @@
 # Lab 5; Exploratory Data Analysis {#lab5eda}
 
-```{r setup, include=FALSE}
+```{r setup16, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width = 5, fig.height = 3)
 ```
 

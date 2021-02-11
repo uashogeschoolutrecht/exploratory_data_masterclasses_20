@@ -1,6 +1,6 @@
 # Lab 2a: Visualize & Explore Data {#lab2aviz}
 
-```{r setup, include=FALSE}
+```{r setup9, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       error = FALSE,

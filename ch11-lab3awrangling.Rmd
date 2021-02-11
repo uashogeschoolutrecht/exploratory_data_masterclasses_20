@@ -1,6 +1,6 @@
 # Lab 3A: Data Wrangling {#lab3awrangling}
 
-```{r setup, include=FALSE}
+```{r setup11, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       error = FALSE,

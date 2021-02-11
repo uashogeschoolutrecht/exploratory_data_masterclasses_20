@@ -1,7 +1,7 @@
 # Lab 4B; Open data & Getting data {#lab4bopendata}
 
 
-```{r setup, include=FALSE}
+```{r setup15, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       error = FALSE,

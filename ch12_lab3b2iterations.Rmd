@@ -3,7 +3,7 @@
 ## This material was taken and adapted from "R for Data Science" by  Garret Grolemund & Hadley Wickham
 
 
-```{r setup, include=FALSE}
+```{r setup12b, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width = 5, fig.height = 3)
 ```
 

@@ -1,6 +1,6 @@
 #Sampling, Probability distributions and bootstrapping {#lab6bsampling_bootstrapping}
 
-```{r setup, include=FALSE}
+```{r setup18, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 

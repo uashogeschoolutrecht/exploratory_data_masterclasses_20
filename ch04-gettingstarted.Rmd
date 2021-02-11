@@ -1,6 +1,6 @@
 # Getting Started {#gettingstarted}
 
-```{r setup, include=FALSE}
+```{r setup4, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4,
                       warning = FALSE,
                       error = FALSE, message = FALSE)
