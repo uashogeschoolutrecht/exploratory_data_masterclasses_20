@@ -1,6 +1,6 @@
 # Lab 1B; Introduction to R {#lab1bintror}
 
-```{r setup, include=FALSE}
+```{r setup7, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 ## chunk options for exercises chunks
